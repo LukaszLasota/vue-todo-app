@@ -1,6 +1,7 @@
 <template>
   <div class="item">
     <h2>Nowe todo: {{ newItem }}</h2>
+    <h3 v-if="showEmptyMaessage">{{ emptyMaessage }}</h3>
     <input type="text" placeholder="todo" v-model="newItem" />
     <button @click="addItem">Dodaj</button>
   </div>
@@ -23,6 +24,8 @@ export default {
     return {
       title: "Aplikacja To Do List",
       newItem: "",
+      emptyMaessage: "Wpisz zadanie",
+      showEmptyMaessage: false,
       items: [
         { title: "Zrobić zakupy", completed: false, id: 1 },
         { title: "Poszprzątać ", completed: true, id: 2 },
@@ -30,14 +33,21 @@ export default {
     };
   },
   methods: {
-    addItem() {
-      this.items.push({
+    addItem() { 
+      if(!this.newItem.trim()==""){
+        this.items.push({
         title: this.newItem,
         completed: false,
         id: Math.random(),
-      });
+        });
+        this.showEmptyMaessage = false
+      }else{
+        this.showEmptyMaessage = !this.showEmptyMaessage
+      }
       this.newItem = "";
-    },
+      this.showEmptyMaessage
+    }
+  ,
     removeItem(id) {
       const index = this.items.findIndex((el) => el.id === id);
       this.items[index].completed = true;
